@@ -1,5 +1,5 @@
 import re
-
+from googletrans import Translator
 
 # opens the text file
 
@@ -43,16 +43,23 @@ def number_of_words():
     return restrictred_list_2
 
 
+# add translations with respect to language
+def translate_the_top(w, language):
+    translate = Translator()
+    translated_word = translate.translate(w, dest=language)
+    return translated_word
+
+
 # convert list to dictionary
 
-
-# add translations with respect to language
 
 # save as pdf file
 
 #
+
 symbols = [',', '.', '`', '“']
 name_of_file = input("Please write the name of the file: ")
 length = int(input("How many words do you want to extract from the text?: "))
+language = input("Which language do you want to translate the top words to?: ").lower()
 create_dic(read_file(name_of_file))
 print(number_of_words())
