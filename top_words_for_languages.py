@@ -1,4 +1,4 @@
-
+import re
 
 
 # opens the text file
@@ -36,9 +36,11 @@ def sort_dic(dictionary):
 
 def number_of_words():
     restrictred_list = []
-    for item in sort_dic(dictionary)[:length]:
-        restrictred_list.append(item)
-    return restrictred_list
+    for item in sort_dic(dictionary):
+        if len(item[0]) > 3 and item[0].isalnum():    
+            restrictred_list.append(item[0].lower())
+    restrictred_list_2 = restrictred_list[:length]
+    return restrictred_list_2
 
 
 # convert list to dictionary
@@ -49,6 +51,7 @@ def number_of_words():
 # save as pdf file
 
 #
+symbols = [',', '.', '`', '“']
 name_of_file = input("Please write the name of the file: ")
 length = int(input("How many words do you want to extract from the text?: "))
 create_dic(read_file(name_of_file))
