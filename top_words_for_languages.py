@@ -1,5 +1,5 @@
-import re
 from googletrans import Translator
+import pandas as pd
 
 # opens the text file
 
@@ -50,8 +50,10 @@ def translate_the_top(w, language):
     return translated_word
 
 
-# convert list to dictionary
-
+# create dataframe from two lists: top_lenght and translated version
+def create_the_dataframe():
+    df = pd.DataFrame(list(zip(number_of_words(), [translate_the_top(the_word, language) for the_word in number_of_words()])))
+    return df
 
 # save as pdf file
 
