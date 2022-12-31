@@ -7,16 +7,23 @@ from pathlib import Path
 
 # opens the text file
 def read_file(name):
-    with open(name, 'r', encoding='utf8') as file:
-        for line in file:
-            line = exclude_characters(line)
-            words = list(filter(not_an_article, line.split(" "))) #filter out all the articles
-            for word in words:
-                word = word.capitalize()
-                if word not in dictionary and word != "\n": 
-                    dictionary[word] = 0
-                elif word != "\n":
-                    dictionary[word] += 1
+    try:
+        f = open(name)
+        f.close()
+    except Exception:
+        print(f"File \"{name}\" not found")
+        # read_file(name_of_file)
+    else:
+        with open(name, 'r', encoding='utf8') as file:
+            for line in file:
+                line = exclude_characters(line)
+                words = list(filter(not_an_article, line.split(" "))) #filter out all the articles
+                for word in words:
+                    word = word.capitalize()
+                    if word not in dictionary and word != "\n": 
+                        dictionary[word] = 0
+                    elif word != "\n":
+                        dictionary[word] += 1    
 
 # excludes special characters from text
 def exclude_characters(line):
@@ -52,13 +59,13 @@ def translate_the_top(w, language):
 
 # create dataframe from two lists: top_lenght and translated version
 def create_the_dataframe():
-    df = pd.DataFrame(list(zip(number_of_words(), [translate_the_top(the_word, language).text for the_word in number_of_words()])), columns=['Original Top', 'Translated Top'])
+    df = pd.DataFrame(list(zip(number_of_words(), [translate_the_top(the_word, language).text.capitalize() for the_word in number_of_words()])), columns=['Original Top', 'Translated Top'])
     return df
 
 # save df as csv file without first column (numbered rows) !!!!not finished
 def data_to_csv(df):
     # filepath = Path(f'Top {length} words with translation to {language}.csv')
-    df.to_csv(Path(f'Top {length} words with translation to {language}.csv'))
+    df.to_csv(Path(f'Top {length} words with translation to {language}.csv'), index=False)
    
 #introducing main function
 def main():
