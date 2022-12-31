@@ -69,7 +69,6 @@ def data_to_csv(df):
    
 #introducing main function
 def main():
-     
     read_file(name_of_file)
     data_to_csv(create_the_dataframe())
     
