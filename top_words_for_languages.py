@@ -33,8 +33,8 @@ def exclude_characters(line):
 
 # filter that excludes articles from frequent words
 def not_an_article(word):
-    article_list = ["the", "a", "an"]
-    if word.lower() in article_list:
+    article_list = ["the", "a", "an", " ", "—", "\"", "\n"]
+    if word.lower() in article_list or word.lower() in [str(x) for x in range(10)]:
         return False
     return True
 
