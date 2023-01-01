@@ -5,6 +5,8 @@ import string
 from pathlib import Path 
 from names_dataset import NameDataset
 import pycountry
+from PyDictionary import PyDictionary
+
 
 
 # opens the text file
@@ -63,6 +65,11 @@ def translate_the_top(w, language):
     translated_word = translate.translate(w, dest=language_keys(language))
     return translated_word
 
+def meaning_top(the_word_mean):
+    # print(the_word_mean)
+    meaning_of_word = PyDictionary().meaning(the_word_mean)
+    return meaning_of_word
+    
 # turns the name of country into its alpha_2 version
 def get_country(country):
     shorter = pycountry.countries.get(name=country).alpha_2
@@ -78,7 +85,11 @@ def names(shorter):
 
 # create dataframe from two lists: top_lenght and translated version
 def create_the_dataframe():
-    df = pd.DataFrame(list(zip(number_of_words(), [translate_the_top(the_word, language).text.capitalize() for the_word in number_of_words()])), columns=['Original Top', 'Translated Top'])
+    translated_list = [translate_the_top(the_word, language).text.capitalize() for the_word in number_of_words()]
+    meaning_list = [meaning_top(the_word) for the_word in number_of_words()]
+    a_meaning = [word for word in meaning_list] #needs to extract values from dictionaries
+    #add here another list that will retun translation of meaning
+    df = pd.DataFrame(list(zip(number_of_words(), translated_list, meaning_list)), columns=['Original Top', 'Translated Top', 'Meaning'])
     return df
 
 # save df as csv file without first column (numbered rows) !!!!not finished
@@ -104,4 +115,5 @@ if __name__ == "__main__":
         main()
     else:
         print("Could not identify language, try again.")
-        
+
+
