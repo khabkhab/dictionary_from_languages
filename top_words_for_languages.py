@@ -25,10 +25,10 @@ def read_file(name):
                 for word in words:
                     word = word.capitalize()
                     if word not in dictionary:
-                        word.split() 
+                        word.strip('\"') 
                         dictionary[word] = 0
                     else:
-                        word.split()
+                        word.strip('\"')
                         dictionary[word] += 1    
 
 # excludes special characters from text
@@ -39,7 +39,7 @@ def exclude_characters(line):
 
 # filter that excludes articles from frequent words
 def not_an_article(word):
-    article_list = ["the", "a", "an", " ", "—", "\"", "\n", "\'", "\t", "\r"]
+    article_list = ["the", "a", "an", " ", "—", "\"", "\n", "\'", "\t", "\r", None]
     merged = article_list + numbers
     #  "potter", "dursley", "harry", "potter", "rowling"
     if word.lower() in merged or word.capitalize() in list_of_names:
@@ -55,8 +55,7 @@ def language_keys(lang):
 # identifies how many words to return
 def number_of_words():
     restrictred_list = []
-    for item in dictionary:
-        restrictred_list.append(item) 
+    [restrictred_list.append(item) for item in dictionary if item != ""]     
     return restrictred_list[:length]
 
 # add translations with respect to the list of top words 
@@ -68,7 +67,11 @@ def translate_the_top(w, language):
 def meaning_top(the_word_mean):
     # print(the_word_mean)
     meaning_of_word = PyDictionary().meaning(the_word_mean)
-    return meaning_of_word
+    if meaning_of_word != None and len(meaning_of_word) != 0:
+        meanings = [meaning_of_word.get(value) for value in meaning_of_word]
+        return meanings
+    else:
+        return None
     
 # turns the name of country into its alpha_2 version
 def get_country(country):
@@ -86,10 +89,10 @@ def names(shorter):
 # create dataframe from two lists: top_lenght and translated version
 def create_the_dataframe():
     translated_list = [translate_the_top(the_word, language).text.capitalize() for the_word in number_of_words()]
-    meaning_list = [meaning_top(the_word) for the_word in number_of_words()]
-    a_meaning = [word for word in meaning_list] #needs to extract values from dictionaries
-    #add here another list that will retun translation of meaning
-    df = pd.DataFrame(list(zip(number_of_words(), translated_list, meaning_list)), columns=['Original Top', 'Translated Top', 'Meaning'])
+    # meaning_list = [meaning_top(the_word) if the_word != [] else None for the_word in number_of_words()]
+    # one_meaning = [word[0] if word != None else None for word in meaning_list]
+    # translated_meaning = [translate_the_top(word, language) if word != None and word != [] else None for word in one_meaning] 
+    df = pd.DataFrame(list(zip(number_of_words(), translated_list)), columns=['Original Top', 'Translated Top'])
     return df
 
 # save df as csv file without first column (numbered rows) !!!!not finished
@@ -115,5 +118,3 @@ if __name__ == "__main__":
         main()
     else:
         print("Could not identify language, try again.")
-
-
