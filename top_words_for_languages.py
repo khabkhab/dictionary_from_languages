@@ -6,6 +6,7 @@ from pathlib import Path
 from names_dataset import NameDataset
 import pycountry
 from PyDictionary import PyDictionary
+from porter2stemmer import Porter2Stemmer
 
 
 
@@ -63,15 +64,6 @@ def translate_the_top(w, language):
     translate = Translator()
     translated_word = translate.translate(w, dest=language_keys(language))
     return translated_word
-
-def meaning_top(the_word_mean):
-    # print(the_word_mean)
-    meaning_of_word = PyDictionary().meaning(the_word_mean)
-    if meaning_of_word != None and len(meaning_of_word) != 0:
-        meanings = [meaning_of_word.get(value) for value in meaning_of_word]
-        return meanings
-    else:
-        return None
     
 # turns the name of country into its alpha_2 version
 def get_country(country):
@@ -89,10 +81,7 @@ def names(shorter):
 # create dataframe from two lists: top_lenght and translated version
 def create_the_dataframe():
     translated_list = [translate_the_top(the_word, language).text.capitalize() for the_word in number_of_words()]
-    # meaning_list = [meaning_top(the_word) if the_word != [] else None for the_word in number_of_words()]
-    # one_meaning = [word[0] if word != None else None for word in meaning_list]
-    # translated_meaning = [translate_the_top(word, language) if word != None and word != [] else None for word in one_meaning] 
-    df = pd.DataFrame(list(zip(number_of_words(), translated_list)), columns=['Original Top', 'Translated Top'])
+    df = pd.DataFrame(list(zip(number_of_words(), translated_list, meaning_list)), columns=['Original Top', 'Translated Top', 'Meaning'])
     return df
 
 # save df as csv file without first column (numbered rows) !!!!not finished
@@ -118,3 +107,7 @@ if __name__ == "__main__":
         main()
     else:
         print("Could not identify language, try again.")
+# list_1 = [["a"], ["b"]]
+# mylist_n = [item for list in list_1 for item in list]
+
+# print(mylist_n)
