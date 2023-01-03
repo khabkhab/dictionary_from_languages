@@ -81,7 +81,7 @@ def names(shorter):
 # create dataframe from two lists: top_lenght and translated version
 def create_the_dataframe():
     translated_list = [translate_the_top(the_word, language).text.capitalize() for the_word in number_of_words()]
-    df = pd.DataFrame(list(zip(number_of_words(), translated_list, meaning_list)), columns=['Original Top', 'Translated Top', 'Meaning'])
+    df = pd.DataFrame(list(zip(number_of_words(), translated_list)), columns=['Original Top', 'Translated Top'])
     return df
 
 # save df as csv file without first column (numbered rows) !!!!not finished
